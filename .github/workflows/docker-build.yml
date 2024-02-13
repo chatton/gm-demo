@@ -1,0 +1,34 @@
+on:
+  push:
+
+jobs:
+  # we skip individual steps rather than the full job as e2e-tests will not run if this task
+  # is skipped. But will run if every individual task is skipped. There is no current way of conditionally needing
+  # a job.
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        if: ${{ inputs.build-and-push-docker-image }}
+      - name: Log in to the Container registry
+        if: ${{ inputs.build-and-push-docker-image }}
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        if: ${{ inputs.build-and-push-docker-image }}
+        id: meta
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
+        with:
+          images: ghcr.io/chatton/gm-demo
+
+      - name: Build and push Docker image
+        if: ${{ inputs.build-and-push-docker-image }}
+        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
+        with:
+          context: gm
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
