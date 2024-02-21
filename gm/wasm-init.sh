@@ -29,10 +29,4 @@ echo "Creating and collecting gentx..."
 run_cmd "genesis gentx val1 100000000000stake --keyring-backend test --chain-id=$CHAIN_ID"
 run_cmd "genesis collect-gentxs"
 
-#echo "Changing defaults and ports in app.toml and config.toml files..."
-#sed -i -e 's#"tcp://0.0.0.0:26656"#"tcp://0.0.0.0:'"$P2PPORT_1"'"#g' $CHAIN_DIR/$CHAINID_1/config/config.toml
-#sed -i -e 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:'"$RPCPORT_1"'"#g' $CHAIN_DIR/$CHAINID_1/config/config.toml
-#sed -i -e 's/timeout_commit = "5s"/timeout_commit = "1s"/g' $CHAIN_DIR/$CHAINID_1/config/config.toml
-#sed -i -e 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $CHAIN_DIR/$CHAINID_1/config/config.toml
-#sed -i -e 's#"tcp://0.0.0.0:1317"#"tcp://0.0.0.0:'"$RESTPORT_1"'"#g' $CHAIN_DIR/$CHAINID_1/config/app.toml
-#sed -i -e 's#":8080"#":'"$ROSETTA_1"'"#g' $CHAIN_DIR/$CHAINID_1/config/app.toml
+docker run -v $HOME:/root -d ibc-go-wasm-simd:latest start --rpc.laddr tcp://127.0.0.1:46657 --grpc.address 127.0.0.1:10290

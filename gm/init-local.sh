@@ -1,5 +1,6 @@
-#!/bin/sh
-set -o pipefail
+#!/bin/bash
+
+set -eou pipefail
 # set variables for the chain
 VALIDATOR_NAME=validator1
 CHAIN_ID=gm
