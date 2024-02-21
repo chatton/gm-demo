@@ -1,0 +1,11 @@
+---
+version: "3.8"
+services:
+  celestia-dev:
+    image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
+    ports:
+      - "26657:26657"
+      - "26650:26650"
+      - "26658:26658"
+      - "26659:26659"
+      - "9090:9090"
