@@ -11,6 +11,8 @@ import (
 	"github.com/cosmos/ibc-go/modules/capability"
 	capabilitykeeper "github.com/cosmos/ibc-go/modules/capability/keeper"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
+	ibcwasm "github.com/cosmos/ibc-go/modules/light-clients/08-wasm"
+	ibcwasmtypes "github.com/cosmos/ibc-go/modules/light-clients/08-wasm/types"
 	icamodule "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts"
 	icacontroller "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/keeper"
@@ -26,6 +28,7 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
+	ibcclientkeeper "github.com/cosmos/ibc-go/v8/modules/core/02-client/keeper"
 	ibcclienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	ibcconnectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
@@ -83,6 +86,12 @@ func (app *App) registerIBCModules() {
 		scopedIBCKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
+
+	// The ibc-go-wasm-simd chain has light client for rollkit app (07-tendermint-cw runtime: cosmwasm).
+	// The gm-demo rollkit app has light client for wasm-simd (07-tendermint runtime:go).
+	// Rollkit app validates self as 08-wasm client, because counterparties which wish to connect must deploy rollkit contract as cosmwasm contract.
+	tmClientValidator := ibcclientkeeper.NewTendermintClientValidator(app.StakingKeeper)
+	app.IBCKeeper.ClientKeeper.SetSelfClientValidator(ibcwasmtypes.NewWasmTMClientValidator(app.appCodec, tmClientValidator))
 
 	// Register the proposal types
 	// Deprecated: Avoid adding new handlers, instead use the new proposal flow
@@ -191,6 +200,7 @@ func RegisterIBC(registry cdctypes.InterfaceRegistry) map[string]appmodule.AppMo
 		capabilitytypes.ModuleName:  capability.AppModule{},
 		ibctm.ModuleName:            ibctm.AppModule{},
 		solomachine.ModuleName:      solomachine.AppModule{},
+		ibcwasmtypes.ModuleName:     ibcwasm.AppModule{},
 	}
 
 	for _, module := range modules {
