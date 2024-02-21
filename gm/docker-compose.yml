@@ -9,3 +9,12 @@ services:
       - "26658:26658"
       - "26659:26659"
       - "9090:9090"
+  wasm-simapp:
+    image: ibc-go-wasm-simd:latest
+    command: ["/bin/sh", "-c", "/wasm-init.sh && simd start"]
+    entrypoint: [""]
+    volumes:
+      - ./wasm-init.sh:/wasm-init.sh
+    ports:
+      - "46657:26657"
+      - "10290:9290"
