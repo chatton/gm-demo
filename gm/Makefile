@@ -346,3 +346,11 @@ docs-link-check:
 	find . -name 'node_modules' -prune -o -name '*.md' -print0 | xargs -0 -n1 markdown-link-check --config ./.github/workflows/link-check-config.json
 
 .PHONY: lint lint-fix docs-lint docs-lint-fix docs-link-check
+
+# start celestia devnet local container
+celestia-devnet:
+	docker run -t -i \
+		-p 26650:26650 -p 26657:26657 -p 26658:26658 -p 26659:26659 -p 9090:9090 \
+		ghcr.io/rollkit/local-celestia-devnet:v0.12.7
+
+.PHONY: celestia-devnet
