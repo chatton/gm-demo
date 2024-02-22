@@ -10,12 +10,14 @@ services:
   #     - "26659:26659"
   #     - "9090:9090"
   wasm-simapp:
-    image: ibc-go-wasm2:latest
-    command: ["/bin/sh", "-c", "/wasm-init.sh && simd start"]
-    entrypoint: [""]
+    image: wasm-simapp:latest
+    command: [ "/bin/sh", "-c", "/wasm-init.sh && simd start" ]
+    entrypoint: [ "" ]
     volumes:
       - ./wasm-init.sh:/wasm-init.sh
-      - ./contracts/ics07_tendermint_cw.wasm.gz:/ics07_tendermint_cw.wasm.gz
+#      - ./contracts/ics07_tendermint_cw.wasm.gz:/ics07_tendermint_cw.wasm.gz
+      - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
+      - ./scripts/update-genesis.py:/update-genesis.py
     ports:
       - "46657:26657"
       - "10290:9290"
