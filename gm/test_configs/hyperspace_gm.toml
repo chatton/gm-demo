@@ -16,4 +16,4 @@ mnemonic = "alley afraid soup fall idea toss can goose become valve initial stro
 skip_optional_client_updates = true
 
 
-# docker run -v /Users/chrly/IG/code/go/src/gm-demo/gm/test_configs:/test_configs ghcr.io/misko9/hyperspace:20231122v39 create-clients --config-a /test_configs/hyperspace_gm.toml --config-b /test_configs/hyperspace_simapp.toml --config-core /test_configs/config_core.toml  
+# docker run --network=gm_default -v /Users/chrly/IG/code/go/src/gm-demo/gm/test_configs:/test_configs ghcr.io/misko9/hyperspace:20231122v39 create-clients --config-a /test_configs/hyperspace_gm.toml --config-b /test_configs/hyperspace_simapp.toml --config-core /test_configs/config_core.toml  
