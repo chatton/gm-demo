@@ -24,3 +24,13 @@ simd genesis add-genesis-account "$(simd keys show rly1 --keyring-backend test -
 echo "Creating and collecting gentx..."
 simd genesis gentx val1 100000000000stake --keyring-backend test --chain-id=$CHAIN_ID
 simd genesis collect-gentxs
+
+BYTES=$(cat ./ics07_tendermint_cw.wasm.gz)
+
+which python
+
+# jq '.["app_state"]["08-wasm"] = {"contracts": { "code_bytes": "$BYTES"}}' ~/.simapp/config/genesis.json > temp.json && mv temp.json ~/.simapp/config/genesis.json 
+
+# jq --arg contract "$BYTES" 'app_state.08-wasm["contracts"]=[{"code_bytes": $contract}]' ~/.simapp/config/genesis.json > temp.json && mv temp.json ~/.simapp/config/genesis.json
+
+echo "Final genesis.json" && cat ~/.simapp/config/genesis.json
