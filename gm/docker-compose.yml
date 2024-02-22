@@ -1,20 +1,21 @@
 ---
 version: "3.8"
 services:
-  celestia-dev:
-    image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
-    ports:
-      - "26657:26657"
-      - "26650:26650"
-      - "26658:26658"
-      - "26659:26659"
-      - "9090:9090"
+  # celestia-dev:
+  #   image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
+  #   ports:
+  #     - "26657:26657"
+  #     - "26650:26650"
+  #     - "26658:26658"
+  #     - "26659:26659"
+  #     - "9090:9090"
   wasm-simapp:
-    image: ibc-go-wasm-simd:latest
+    image: ibc-go-wasm2:latest
     command: ["/bin/sh", "-c", "/wasm-init.sh && simd start"]
     entrypoint: [""]
     volumes:
       - ./wasm-init.sh:/wasm-init.sh
+      - ./contracts/ics07_tendermint_cw.wasm.gz:/ics07_tendermint_cw.wasm.gz
     ports:
       - "46657:26657"
       - "10290:9290"
