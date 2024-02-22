@@ -1,0 +1,2 @@
+[core]
+prometheus_endpoint = "https://127.0.0.1"
