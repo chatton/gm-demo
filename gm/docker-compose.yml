@@ -1,15 +1,15 @@
 ---
 version: "3.8"
 services:
-  celestia-dev:
-    hostname: celestia
-    image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
-    ports:
-      - "26657"
-      - "26650"
-      - "26658"
-      - "26659"
-      - "9090"
+  # celestia-dev:
+  #   hostname: celestia
+  #   image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
+  #   ports:
+  #     - "26657"
+  #     - "26650"
+  #     - "26658"
+  #     - "26659"
+  #     - "9090"
 
   wasm-simapp:
     hostname: wasm-simapp
@@ -23,18 +23,47 @@ services:
     ports:
       - "46657:26657"
       - "10290:9290"
+    environment:
+      - "CHAIN_ID=wasm-simapp-1"
 
-  rollkit-app:
-    hostname: rollkit
-    depends_on:
-      - celestia-dev
-    image: rollkit:latest
-    # wait 5 seconds to give celestia time to start
-    command: [ "/bin/sh", "-c", "sleep 5 && /init-local.sh" ]
+  wasm-simapp-2:
+    hostname: wasm-simapp-2
+    image: wasm-simapp:latest
+    command: [ "/bin/sh", "-c", "/wasm-init.sh && simd start" ]
     entrypoint: [ "" ]
     volumes:
-      - ./init-local.sh:/init-local.sh
+      - ./wasm-init.sh:/wasm-init.sh
+      - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
+      - ./scripts/update-genesis.py:/update-genesis.py
     ports:
-      - "36656"
-      - "36657"
-      - "9290"
+      - "56657:26657"
+      - "11290:9290"
+    environment:
+      - "CHAIN_ID=wasm-simapp-2"
+
+  # rollkit-app:
+  #   hostname: rollkit
+  #   depends_on:
+  #     - celestia-dev
+  #   image: rollkit:latest
+  #   # wait 5 seconds to give celestia time to start
+  #   command: [ "/bin/sh", "-c", "sleep 5 && /init-local.sh" ]
+  #   entrypoint: [ "" ]
+  #   volumes:
+  #     - ./init-local.sh:/init-local.sh
+  #   ports:
+  #     - "36656"
+  #     - "36657"
+  #     - "9290"
+
+  hyperspace:
+    image: ghcr.io/misko9/hyperspace:20231122v39
+    depends_on:
+      # - rollkit-app
+      - wasm-simapp
+      - wasm-simapp-2
+    entrypoint: [ "" ]
+    command: [ "/bin/sh", "-c", "sleep 10 && /init-hyperspace.sh" ]
+    volumes:
+      - ./test_configs:/test_configs
+      - ./init-hyperspace.sh:/init-hyperspace.sh

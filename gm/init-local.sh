@@ -97,10 +97,10 @@ ADDRESS=$(jq -r '.address' ~/.gm/config/priv_validator_key.json)
 PUB_KEY=$(jq -r '.pub_key' ~/.gm/config/priv_validator_key.json)
 jq --argjson pubKey "$PUB_KEY" '.consensus["validators"]=[{"address": "'$ADDRESS'", "pub_key": $pubKey, "power": "1000", "name": "Rollkit Sequencer"}]' ~/.gm/config/genesis.json > temp.json && mv temp.json ~/.gm/config/genesis.json
 
-echo "gmd start --rollkit.aggregator --rollkit.da_address=":26650" --rollkit.da_start_height \$DA_BLOCK_HEIGHT --rpc.laddr tcp://127.0.0.1:36657 --grpc.address 127.0.0.1:9290 --p2p.laddr \"0.0.0.0:36656\" --minimum-gas-prices="0.025stake"" >> restart-local.sh
+echo "gmd start --rollkit.aggregator --rollkit.da_address=":26650" --rollkit.da_start_height \$DA_BLOCK_HEIGHT --rpc.laddr tcp://rollkit:36657 --grpc.address rollkit:9290 --p2p.laddr \"0.0.0.0:36656\" --minimum-gas-prices="0.025stake"" >> restart-local.sh
 
 # start the chain
-gmd start --rollkit.aggregator --rollkit.da_address=":26650" --rollkit.da_start_height $DA_BLOCK_HEIGHT --rpc.laddr tcp://127.0.0.1:36657 --grpc.address 127.0.0.1:9290 --p2p.laddr "0.0.0.0:36656" --minimum-gas-prices="0.025stake"
+gmd start --rollkit.aggregator --rollkit.da_address=":26650" --rollkit.da_start_height $DA_BLOCK_HEIGHT --rpc.laddr tcp://rollkit:36657 --grpc.address rollkit:9290 --p2p.laddr "0.0.0.0:36656" --minimum-gas-prices="0.025stake"
 
 # RUSTFLAGS='-C link-arg=-s' cargo build -p ics07-tendermint-cw --target=wasm32-unknown-unknown --release --lib
 # wasm-opt -Os target/wasm32-unknown-unknown/release/ics07_tendermint_cw.wasm -o ics07_tendermint_cw.wasm
