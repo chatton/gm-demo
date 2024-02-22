@@ -347,19 +347,12 @@ docs-link-check:
 
 .PHONY: lint lint-fix docs-lint docs-lint-fix docs-link-check
 
-# start celestia devnet local container
-celestia-devnet:
-	docker run -t -i \
-		-p 26650:26650 -p 26657:26657 -p 26658:26658 -p 26659:26659 -p 9090:9090 \
-		ghcr.io/rollkit/local-celestia-devnet:v0.12.7
-
-rollkit:
-	./init-local.sh
-
 docker-build-wasm:
 	docker build -t wasm-simapp:latest -f ./Dockerfile.wasm .
 
-wasm-simapp:
-	./wasm-init.sh
+docker-build-rollkit:
+	docker build -t rollkit:latest -f ./Dockerfile.local .
 
-.PHONY: celestia-devnet rollkit
+docker-build-all: docker-build-wasm docker-build-rollkit
+
+.PHONY: docker-build-wasm docker-build-rollkit docker-build-all

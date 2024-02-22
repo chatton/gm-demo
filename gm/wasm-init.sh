@@ -25,16 +25,7 @@ echo "Creating and collecting gentx..."
 simd genesis gentx val1 100000000000stake --keyring-backend test --chain-id=$CHAIN_ID
 simd genesis collect-gentxs
 
-#BYTES=$(cat ./ics07_tendermint_cw.wasm.gz)
-
 genesis_contents=$(cat /root/.simapp/config/genesis.json)
-#python ./update-genesis.py /root/.simapp/config/genesis.json /root/ics07_tendermint_cw.wasm.gz
-#python ./update-genesis.py "${genesis_contents}" /root/.simapp/config/genesis.json  /ics07_tendermint_cw.wasm.gz
 python ./update-genesis.py "${genesis_contents}" /root/.simapp/config/genesis.json  /ics07_tendermint_cw.wasm
-#python ./update-genesis.py "${genesis_contents}" /root/.simapp/config/genesis.json $BYTES
-
-# jq '.["app_state"]["08-wasm"] = {"contracts": { "code_bytes": "$BYTES"}}' ~/.simapp/config/genesis.json > temp.json && mv temp.json ~/.simapp/config/genesis.json 
-
-# jq --arg contract "$BYTES" 'app_state.08-wasm["contracts"]=[{"code_bytes": $contract}]' ~/.simapp/config/genesis.json > temp.json && mv temp.json ~/.simapp/config/genesis.json
 
 echo "Final genesis.json" && cat ~/.simapp/config/genesis.json

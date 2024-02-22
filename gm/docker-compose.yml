@@ -2,13 +2,14 @@
 version: "3.8"
 services:
   celestia-dev:
-   image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
-   ports:
-     - "26657:26657"
-     - "26650:26650"
-     - "26658:26658"
-     - "26659:26659"
-     - "9090:9090"
+    hostname: celestia
+    image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
+    ports:
+      - "26657"
+      - "26650"
+      - "26658"
+      - "26659"
+      - "9090"
 
   wasm-simapp:
     image: wasm-simapp:latest
@@ -21,3 +22,17 @@ services:
     ports:
       - "46657:26657"
       - "10290:9290"
+
+  rollkit-app:
+    depends_on:
+      - celestia-dev
+    image: rollkit:latest
+    # wait 5 seconds to give celestia time to start
+    command: [ "/bin/sh", "-c", "sleep 5 && /init-local.sh" ]
+    entrypoint: [ "" ]
+    volumes:
+      - ./init-local.sh:/init-local.sh
+    ports:
+      - "36656"
+      - "36657"
+      - "9290"
