@@ -356,6 +356,9 @@ celestia-devnet:
 rollkit:
 	./init-local.sh
 
+docker-build-wasm:
+	docker build -t wasm-simapp:latest -f ./Dockerfile.wasm .
+
 wasm-simapp:
 	./wasm-init.sh
 
