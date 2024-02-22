@@ -1,7 +1,7 @@
 type = "cosmos"
 name = "gm"
-rpc_url = "http://127.0.0.1:26658"
-grpc_url = "http://127.0.0.1:9290"
+rpc_url = "http://rollkit:36657"
+grpc_url = "http://rollkit:9290"
 websocket_url = ""
 chain_id = "gm"
 client_id = "07-tendermint-0"
@@ -12,7 +12,10 @@ fee_amount = "0"
 gas_limit = 10000000000
 store_prefix = "ibc"
 max_tx_size = 20000000
-wasm_code_id = "HERE IS THE WASM CODE"
+wasm_code_id = ""
 channel_whitelist = [["channel-1", "transfer"]]
-mnemonic = "mnemonic phrase example"
+mnemonic = "alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart"
 skip_optional_client_updates = true
+
+
+# docker run -v /Users/chrly/IG/code/go/src/gm-demo/gm/test_configs:/test_configs ghcr.io/misko9/hyperspace:20231122v39 create-clients --config-a /test_configs/hyperspace_gm.toml --config-b /test_configs/hyperspace_simapp.toml --config-core /test_configs/config_core.toml  

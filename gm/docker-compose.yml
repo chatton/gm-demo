@@ -12,6 +12,7 @@ services:
       - "9090"
 
   wasm-simapp:
+    hostname: wasm-simapp
     image: wasm-simapp:latest
     command: [ "/bin/sh", "-c", "/wasm-init.sh && simd start" ]
     entrypoint: [ "" ]
@@ -24,6 +25,7 @@ services:
       - "10290:9290"
 
   rollkit-app:
+    hostname: rollkit
     depends_on:
       - celestia-dev
     image: rollkit:latest

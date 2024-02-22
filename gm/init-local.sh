@@ -69,16 +69,18 @@ echo -e "\n Your DA_BLOCK_HEIGHT is $DA_BLOCK_HEIGHT \n"
 # reset any existing genesis/chain data
 gmd tendermint unsafe-reset-all
 
-# initialize the validator with the chain ID you set
-gmd init $VALIDATOR_NAME --chain-id $CHAIN_ID
+VAL_MNEMONIC_1="clock post desk civil pottery foster expand merit dash seminar song memory figure uniform spice circle try happy obvious trash crime hybrid hood cushion"
+WALLET_MNEMONIC_1="banner spread envelope side kite person disagree path silver will brother under couch edit food venture squirrel civil budget number acquire point work mass"
+RLY_MNEMONIC_1="alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart"
 
-# add keys for key 1 and key 2 to keyring-backend test
-gmd keys add $KEY_NAME --keyring-backend test
-gmd keys add $KEY_2_NAME --keyring-backend test
+echo "Adding genesis accounts..."
+echo ${VAL_MNEMONIC_1} | gmd keys add validator1 --recover --keyring-backend=test
+echo ${WALLET_MNEMONIC_1} | gmd keys add wallet1 --recover --keyring-backend=test
+echo ${RLY_MNEMONIC_1} | gmd keys add rly1 --recover --keyring-backend=test
 
-# add these as genesis accounts
-gmd genesis add-genesis-account $KEY_NAME $TOKEN_AMOUNT --keyring-backend test
-gmd genesis add-genesis-account $KEY_2_NAME $TOKEN_AMOUNT --keyring-backend test
+gmd genesis add-genesis-account "$(gmd keys show validator1 --keyring-backend test -a)" 100000000000stake
+gmd genesis add-genesis-account "$(gmd keys show wallet1 --keyring-backend test -a)" 100000000000stake
+gmd genesis add-genesis-account "$(gmd keys show rly1 --keyring-backend test -a)" 100000000000stake
 
 # set the staking amounts in the genesis transaction
 gmd genesis gentx $KEY_NAME $STAKING_AMOUNT --chain-id $CHAIN_ID --keyring-backend test
