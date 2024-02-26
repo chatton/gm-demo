@@ -23,16 +23,16 @@ services:
     # hostname: wasm-simapp
     network_mode: "host"
     image: wasm-simapp:latest
-    command: [ "/bin/sh", "-c", "/wasm-init.sh"]
+    command: [ "/bin/sh", "-c", "/wasm-init.sh" ]
     entrypoint: [ "" ]
     volumes:
       - ./wasm-init.sh:/wasm-init.sh
       - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
       - ./scripts/update-genesis.py:/update-genesis.py
-    ports:
-      - "46657"
-      - "10290"
-      - "6060"
+    #    ports:
+    #      - "46657"
+    #      - "10290"
+    #      - "6060"
     environment:
       - "CHAIN_ID=wasm-simapp-1"
 
@@ -40,44 +40,56 @@ services:
     # hostname: wasm-simapp-2
     network_mode: "host"
     image: wasm-simapp:latest
-    command: [ "/bin/sh", "-c", "/wasm-init-2.sh"]
+    command: [ "/bin/sh", "-c", "/wasm-init-2.sh" ]
     entrypoint: [ "" ]
     volumes:
       - ./wasm-init-2.sh:/wasm-init-2.sh
       - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
       - ./scripts/update-genesis.py:/update-genesis.py
-    ports:
-      - "56657"
-      - "11290"
-      - "6061"
+    #    ports:
+    #      - "56657"
+    #      - "11290"
+    #      - "6061"
     environment:
       - "CHAIN_ID=wasm-simapp-2"
 
-#  rollkit-app:
-#    hostname: rollkit
-#    depends_on:
-#      celestia-dev:
-#        # wait for the celestia endpoints to be accessible.
-#        condition: service_healthy
-#    image: rollkit:latest
-#    # wait 5 seconds to give celestia time to start
-#    command: [ "/bin/sh", "-c", "/init-local.sh" ]
-#    entrypoint: [ "" ]
-#    volumes:
-#      - ./init-local.sh:/init-local.sh
-#    ports:
-#      - "36656"
-#      - "36657"
-#      - "9290"
+  #  rollkit-app:
+  #    hostname: rollkit
+  #    depends_on:
+  #      celestia-dev:
+  #        # wait for the celestia endpoints to be accessible.
+  #        condition: service_healthy
+  #    image: rollkit:latest
+  #    # wait 5 seconds to give celestia time to start
+  #    command: [ "/bin/sh", "-c", "/init-local.sh" ]
+  #    entrypoint: [ "" ]
+  #    volumes:
+  #      - ./init-local.sh:/init-local.sh
+  #    ports:
+  #      - "36656"
+  #      - "36657"
+  #      - "9290"
 
-#   hyperspace:
-#     image: ghcr.io/misko9/hyperspace:20231122v39
-#     depends_on:
-#       # - rollkit-app
-#       - wasm-simapp
-# #      - wasm-simapp-2
-#     entrypoint: [ "" ]
-#     command: [ "/bin/sh", "-c", "sleep 10 && /init-hyperspace.sh" ]
-#     volumes:
-#       - ./test_configs:/test_configs
-#       - ./init-hyperspace.sh:/init-hyperspace.sh
+  #   hyperspace:
+  #     image: ghcr.io/misko9/hyperspace:20231122v39
+  #     depends_on:
+  #       # - rollkit-app
+  #       - wasm-simapp
+  # #      - wasm-simapp-2
+  #     entrypoint: [ "" ]
+  #     command: [ "/bin/sh", "-c", "sleep 10 && /init-hyperspace.sh" ]
+  #     volumes:
+  #       - ./test_configs:/test_configs
+  #       - ./init-hyperspace.sh:/init-hyperspace.sh
+
+  rly:
+    image: ghcr.io/charleenfei/relayer:feat-tm_wasm_support
+    depends_on:
+      - wasm-simapp
+      - wasm-simapp-2
+    entrypoint: [""]
+    command: [ "/bin/sh", "-c", "sleep 10 && /init-rly.sh" ]
+    volumes:
+       - ./test_configs/:/root/.relayer/config/config.yaml
+       - ./test_configs:/test_configs
+       - ./init-rly.sh:/init-rly.sh
