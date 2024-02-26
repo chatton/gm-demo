@@ -7,13 +7,13 @@ global:
     ics20-memo-limit: 0
     max-receiver-size: 0
 chains:
-    gm:
+    wasm-simapp-1:
         type: cosmos
         value:
-            key-directory: /Users/chrly/.relayer/keys/gm
-            key: gm-key-2
-            chain-id: gm
-            rpc-addr: http://rollkit:36657
+            key-directory: /root/.relayer/keys/wasm-simapp-1
+            key: rly-a
+            chain-id: wasm-simapp-1
+            rpc-addr: http://localhost:46657
             account-prefix: cosmos
             keyring-backend: test
             gas-adjustment: 1.2
@@ -32,13 +32,13 @@ chains:
             min-loop-duration: 0s
             extension-options: []
             feegrants: null
-    wasm-simapp-1:
+    wasm-simapp-2:
         type: cosmos
         value:
-            key-directory: /Users/chrly/.relayer/keys/wasm-simapp-1
-            key: rly1
-            chain-id: wasm-simapp-1
-            rpc-addr: http://wasm-simapp:46657
+            key-directory: /root/.relayer/keys/wasm-simapp-2
+            key: rly-b
+            chain-id: wasm-simapp-2
+            rpc-addr: http://localhost:56657
             account-prefix: cosmos
             keyring-backend: test
             gas-adjustment: 1.2
@@ -60,9 +60,9 @@ chains:
 paths:
     demo-path:
         src:
-            chain-id: gm
-        dst:
             chain-id: wasm-simapp-1
+        dst:
+            chain-id: wasm-simapp-2
         src-channel-filter:
             rule: ""
             channel-list: []

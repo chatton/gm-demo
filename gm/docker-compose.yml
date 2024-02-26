@@ -35,6 +35,13 @@ services:
     #      - "6060"
     environment:
       - "CHAIN_ID=wasm-simapp-1"
+    healthcheck:
+     # considered healthy if the /block endpoint returns a 200 status code
+     test: curl http://localhost:46657/block
+     interval: 5s
+     retries: 5
+     start_period: 1s
+     timeout: 30s
 
   wasm-simapp-2:
     # hostname: wasm-simapp-2
@@ -52,6 +59,13 @@ services:
     #      - "6061"
     environment:
       - "CHAIN_ID=wasm-simapp-2"
+    healthcheck:
+      # considered healthy if the /block endpoint returns a 200 status code
+      test: curl http://localhost:56657/block
+      interval: 5s
+      retries: 5
+      start_period: 1s
+      timeout: 30s
 
   #  rollkit-app:
   #    hostname: rollkit
@@ -83,13 +97,17 @@ services:
   #       - ./init-hyperspace.sh:/init-hyperspace.sh
 
   rly:
+    user: root
+    container_name: rly
     image: ghcr.io/charleenfei/relayer:feat-tm_wasm_support
-    depends_on:
-      - wasm-simapp
-      - wasm-simapp-2
+    network_mode: "host"
+#    depends_on:
+#      wasm-simapp:
+#        condition: service_healthy
+#      wasm-simapp-2:
+#        condition: service_healthy
     entrypoint: [""]
-    command: [ "/bin/sh", "-c", "sleep 10 && /init-rly.sh" ]
+    command: [ "/bin/sh", "-c", "sleep 30 && /init-rly.sh" ]
     volumes:
-       - ./test_configs/:/root/.relayer/config/config.yaml
-       - ./test_configs:/test_configs
+       - ./test_configs/config.yaml:/root/.relayer/config/config.yaml
        - ./init-rly.sh:/init-rly.sh
