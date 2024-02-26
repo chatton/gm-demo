@@ -9,11 +9,11 @@ CHAIN_A_KEY="rly-a"
 CHAIN_B_KEY="rly-b"
 
 echo "Using Config"
-rly --home /root/.relayer config show
+rly --home ${HOME}/.relayer config show
 
 # relayer will have same address on both chains.
-rly --home /root/.relayer keys restore ${CHAIN_A_NAME} ${CHAIN_A_KEY} "${RLY_MNEMONIC}"
-rly --home /root/.relayer keys restore ${CHAIN_B_NAME} ${CHAIN_B_KEY} "${RLY_MNEMONIC}"
+rly --home ${HOME}/.relayer keys restore ${CHAIN_A_NAME} ${CHAIN_A_KEY} "${RLY_MNEMONIC}"
+rly --home ${HOME}/.relayer keys restore ${CHAIN_B_NAME} ${CHAIN_B_KEY} "${RLY_MNEMONIC}"
 
 # use the created key
 rly keys use ${CHAIN_A_NAME} ${CHAIN_A_KEY}

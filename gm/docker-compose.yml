@@ -96,18 +96,18 @@ services:
   #       - ./test_configs:/test_configs
   #       - ./init-hyperspace.sh:/init-hyperspace.sh
 
-  rly:
-    user: root
-    container_name: rly
-    image: ghcr.io/charleenfei/relayer:feat-tm_wasm_support
-    network_mode: "host"
-#    depends_on:
-#      wasm-simapp:
-#        condition: service_healthy
-#      wasm-simapp-2:
-#        condition: service_healthy
-    entrypoint: [""]
-    command: [ "/bin/sh", "-c", "sleep 30 && /init-rly.sh" ]
-    volumes:
-       - ./test_configs/config.yaml:/root/.relayer/config/config.yaml
-       - ./init-rly.sh:/init-rly.sh
+#  rly:
+#    user: root
+#    container_name: rly
+#    image: ghcr.io/charleenfei/relayer:feat-tm_wasm_support
+#    network_mode: "host"
+##    depends_on:
+##      wasm-simapp:
+##        condition: service_healthy
+##      wasm-simapp-2:
+##        condition: service_healthy
+#    entrypoint: [""]
+#    command: [ "/bin/sh", "-c", "sleep 30 && /init-rly.sh" ]
+#    volumes:
+#       - ./test_configs/config.yaml:/root/.relayer/config/config.yaml
+#       - ./init-rly.sh:/init-rly.sh

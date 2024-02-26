@@ -17,7 +17,7 @@ chains:
             account-prefix: cosmos
             keyring-backend: test
             gas-adjustment: 1.2
-            gas-prices: 0.01uatom
+            gas-prices: 0.01stake
             min-gas-amount: 0
             max-gas-amount: 0
             debug: true
@@ -42,7 +42,7 @@ chains:
             account-prefix: cosmos
             keyring-backend: test
             gas-adjustment: 1.2
-            gas-prices: 0.01uatom
+            gas-prices: 0.01stake
             min-gas-amount: 0
             max-gas-amount: 0
             debug: true
