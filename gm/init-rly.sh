@@ -22,4 +22,5 @@ rly keys use ${CHAIN_B_NAME} ${CHAIN_B_KEY}
 rly q balance ${CHAIN_A_NAME}
 rly q balance ${CHAIN_B_NAME}
 
-rly transact client wasm-simapp-1 wasm-simapp-2 demo-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
+#rly transact client wasm-simapp-1 wasm-simapp-2 demo-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
+rly tx link demo-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39 --dst-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
