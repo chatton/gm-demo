@@ -29,4 +29,4 @@ python ./update-genesis.py "${genesis_contents}" /root/.simapp/config/genesis.js
 
 echo "Final genesis.json" && cat ~/.simapp/config/genesis.json
 
-simd start --rpc.laddr tcp://localhost:46657 --rpc.pprof_laddr localhost:6060 --grpc.address localhost:10290 --p2p.laddr "0.0.0.0:56656"
+simd start --rpc.laddr tcp://0.0.0.0:46657 --rpc.pprof_laddr "0.0.0.0:6060" --grpc.address "0.0.0.0:10290" --p2p.laddr "0.0.0.0:56656"
