@@ -1,93 +1,70 @@
----
-version: "3.8"
+version: '3.8'
 services:
-   celestia-dev:
-     # hostname: celestia
-     network_mode: "host"
-     image: ghcr.io/rollkit/local-celestia-devnet:v0.12.7
-#     ports:
-#       - "26657"
-#       - "26650"
-#       - "26658"
-#       - "26659"
-#       - "9090"
-     healthcheck:
-       # considered healthy if the /block endpoint returns a 200 status code
-       test: curl http://localhost:26657/block
-       interval: 5s
-       retries: 5
-       start_period: 1s
-       timeout: 10s
-
-   wasm-simapp:
-    # hostname: wasm-simapp
-    network_mode: "host"
-    image: wasm-simapp:latest
-    command: [ "/bin/sh", "-c", "/wasm-init.sh" ]
-    entrypoint: [ "" ]
-    volumes:
-      - ./wasm-init.sh:/wasm-init.sh
-      - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
-      - ./scripts/update-genesis.py:/update-genesis.py
-    #    ports:
-    #      - "36656"
-    #      - "10290"
-    #      - "6060"
-    environment:
-      - "CHAIN_ID=wasm-simapp-1"
+  celestia-dev:
+    hostname: celestia
+    image: 'ghcr.io/rollkit/local-celestia-devnet:v0.12.7'
+    ports:
+      - '26650:26650'
+      - '26657:26657'
+      - '26658:26658'
+      - '26659:26659'
+      - '9090:9090'
     healthcheck:
-     # considered healthy if the /block endpoint returns a 200 status code
-     test: curl http://localhost:46657/block
-     interval: 5s
-     retries: 5
-     start_period: 1s
-     timeout: 30s
+      test: 'curl http://celestia:26657/block'
+      interval: 5s
+      retries: 10
+      start_period: 1s
+      timeout: 10s
+  
+  wasm-simapp:
+    hostname: wasm-simapp
+    image: 'wasm-simapp:latest'
+    ports:
+      - '46657:46657'
+      - '10290:10290'
+      - '6060:6060'
+    command:
+      - /bin/sh
+      - '-c'
+      - /wasm-init.sh
+    entrypoint:
+      - ''
+    volumes:
+      - './wasm-init.sh:/wasm-init.sh'
+      - './contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm'
+      - './scripts/update-genesis.py:/update-genesis.py'
+    environment:
+      - CHAIN_ID=wasm-simapp-1
+    healthcheck:
+      test: 'curl http://wasm-simapp:46657/block'
+      interval: 5s
+      retries: 10
+      start_period: 1s
+      timeout: 30s
+    
+  rollkit-app:
+    user: root
+    container_name: rollkit
+    hostname: rollkit
+    depends_on:
+      celestia-dev:
+        condition: service_healthy
+    image: 'rollkit:latest'
+    command:
+      - /bin/sh
+      - '-c'
+      - /init-local.sh
+    entrypoint:
+      - ''
+    volumes:
+      - './init-local.sh:/init-local.sh'
+    ports:
+      - '36657:36657'
+      - '36656:36656'
+      - '9290:9290'
 
-#  wasm-simapp-2:
-#    # hostname: wasm-simapp-2
-#    network_mode: "host"
-#    image: wasm-simapp:latest
-#    command: [ "/bin/sh", "-c", "/wasm-init-2.sh" ]
-#    entrypoint: [ "" ]
-#    volumes:
-#      - ./wasm-init-2.sh:/wasm-init-2.sh
-#      - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
-#      - ./scripts/update-genesis.py:/update-genesis.py
-#    #    ports:
-#    #      - "56657"
-#    #      - "11290"
-#    #      - "6061"
-#    environment:
-#      - "CHAIN_ID=wasm-simapp-2"
-#    healthcheck:
-#      # considered healthy if the /block endpoint returns a 200 status code
-#      test: curl http://localhost:56657/block
-#      interval: 5s
-#      retries: 5
-#      start_period: 1s
-#      timeout: 30s
 
-   rollkit-app:
-      user: root
-      container_name: rollkit
-#      hostname: rollkit
-      network_mode: "host"
-      depends_on:
-        celestia-dev:
-          # wait for the celestia endpoints to be accessible.
-          condition: service_healthy
-      image: rollkit:latest
-      # wait 5 seconds to give celestia time to start
-      command: [ "/bin/sh", "-c", "/init-local.sh" ]
-      entrypoint: [ "" ]
-      volumes:
-        - ./init-local.sh:/init-local.sh
-#      ports:
-#        - "36656"
-#        - "36657"
-#        - "9290"
-
-  #   hyperspace:
+#   hyperspace:
   #     image: ghcr.io/misko9/hyperspace:20231122v39
   #     depends_on:
   #       # - rollkit-app
@@ -114,3 +91,27 @@ services:
 #    volumes:
 #       - ./test_configs/config.yaml:/root/.relayer/config/config.yaml
 #       - ./init-rly.sh:/init-rly.sh
+
+#  wasm-simapp-2:
+#    # hostname: wasm-simapp-2
+#    network_mode: "host"
+#    image: wasm-simapp:latest
+#    command: [ "/bin/sh", "-c", "/wasm-init-2.sh" ]
+#    entrypoint: [ "" ]
+#    volumes:
+#      - ./wasm-init-2.sh:/wasm-init-2.sh
+#      - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
+#      - ./scripts/update-genesis.py:/update-genesis.py
+#    #    ports:
+#    #      - "56657"
+#    #      - "11290"
+#    #      - "6061"
+#    environment:
+#      - "CHAIN_ID=wasm-simapp-2"
+#    healthcheck:
+#      # considered healthy if the /block endpoint returns a 200 status code
+#      test: curl http://localhost:56657/block
+#      interval: 5s
+#      retries: 5
+#      start_period: 1s
+#      timeout: 30s

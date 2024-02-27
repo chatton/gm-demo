@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -eou pipefail
 
 RLY_MNEMONIC="alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart"
 
