@@ -45,3 +45,8 @@ Query the client states
 simd q ibc client states --grpc-addr localhost:11290 --grpc-insecure
 ```
 
+Perform msg transfer
+
+```bash
+simd tx ibc-transfer transfer transfer channel-0 cosmos1mjk79fjjgpplak5wq838w0yd982gzkyfrk07am 1000stake --from cosmos1mjk79fjjgpplak5wq838w0yd982gzkyfrk07am --keyring-backend test --chain-id wasm-simapp-1 --node tcp://localhost:46657
+```
