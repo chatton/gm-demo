@@ -31,7 +31,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.50.4
 	github.com/cosmos/gogoproto v1.4.11
 	github.com/cosmos/ibc-go/modules/capability v1.0.0
-	github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240221150628-83e79c2e3993
+	github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240227115835-a39048ed0679
 	github.com/cosmos/ibc-go/v8 v8.0.0
 	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.1
@@ -342,6 +342,6 @@ replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-ro
 
 // feat/rollkit commits for ibc-go + wasm simapp
 replace (
-	github.com/cosmos/ibc-go/modules/light-clients/08-wasm => github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240221150628-83e79c2e3993
-	github.com/cosmos/ibc-go/v8 => github.com/cosmos/ibc-go/v8 v8.0.0-beta.1.0.20240221150628-83e79c2e3993
+	github.com/cosmos/ibc-go/modules/light-clients/08-wasm => github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240227115835-a39048ed0679
+	github.com/cosmos/ibc-go/v8 => github.com/cosmos/ibc-go/v8 v8.0.0-beta.1.0.20240227115835-a39048ed0679
 )

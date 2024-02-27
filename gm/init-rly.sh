@@ -3,10 +3,10 @@
 RLY_MNEMONIC="alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart"
 
 CHAIN_A_NAME="wasm-simapp-1"
-CHAIN_B_NAME="wasm-simapp-2"
+CHAIN_B_NAME="rollkit"
 
 CHAIN_A_KEY="rly-a"
-CHAIN_B_KEY="rly-b"
+CHAIN_B_KEY="gm-key"
 
 echo "Using Config"
 rly --home ${HOME}/.relayer config show
@@ -22,5 +22,7 @@ rly keys use ${CHAIN_B_NAME} ${CHAIN_B_KEY}
 rly q balance ${CHAIN_A_NAME}
 rly q balance ${CHAIN_B_NAME}
 
-#rly transact client wasm-simapp-1 wasm-simapp-2 demo-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
-rly tx link demo-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39 --dst-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
+#rly tx link rollkit-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39 --dst-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
+rly tx link rollkit-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
+
+rly start
