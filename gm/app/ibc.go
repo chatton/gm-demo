@@ -174,6 +174,8 @@ func (app *App) registerIBCModules() {
 	app.ScopedICAHostKeeper = scopedICAHostKeeper
 	app.ScopedICAControllerKeeper = scopedICAControllerKeeper
 
+	ibcwasmtypes.RegisterInterfaces(app.interfaceRegistry)
+
 	// register IBC modules
 	if err := app.RegisterModules(
 		ibc.NewAppModule(app.IBCKeeper),
