@@ -347,12 +347,12 @@ docs-link-check:
 
 .PHONY: lint lint-fix docs-lint docs-lint-fix docs-link-check
 
-docker-build-wasm:
+build-docker-wasm:
 	docker build -t wasm-simapp:latest -f ./Dockerfile.wasm .
 
-docker-build-rollkit:
+build-docker-rollkit:
 	docker build -t rollkit:latest -f ./Dockerfile.local .
 
-docker-build-all: docker-build-wasm docker-build-rollkit
+build-docker-all: docker-build-wasm docker-build-rollkit
 
 .PHONY: docker-build-wasm docker-build-rollkit docker-build-all

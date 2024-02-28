@@ -2,51 +2,68 @@
 
 ### Build wasm simapp image in ibc-go
 
-in ibc-go directory
+in ibc-go root directory (branch feat/rollkit)
 
 ```bash
 make build-docker-wasm
 ```
 
-### Create celestia dev testnet
-
-gm-demo repo.
-
-In a new terminal.
+### Build extended wasm image in this repo in `gm` directory.
 
 ```bash
-make celestia-devnet
+make build-docker-wasm
 ```
 
-### Start rollkit rollup app.
+> this is an additional image which adds dependencies only required by this demo repo.
+
+### Build rollkit rollapp image in this repo in `gm` directory.
 
 ```bash
-make rollkit
+make build-docker-rollkit
 ```
 
-### Start wasm simapp
+### Install rly binary locally
+
+Checkout [this fork](https://github.com/charleenfei/relayer/tree/feat/tm_wasm_support) of the relayer (branch
+feat/tm_wasm_support).
+
+Build the binary with
 
 ```bash
-make wasm-simapp
+make install
 ```
 
-### Run hyperspace relayer
+### Initialize the relayer's configuration directory/file.
 
 ```bash
-docker run -v /Users/chrly/IG/code/go/src/gm-demo/gm/test_configs:/test_configs ghcr.io/misko9/hyperspace:20231122v39 create-clients --config-b /test_configs/hyperspace_gm.toml --config-a /test_configs/hyperspace_simapp.toml --config-core /test_configs/config_core.toml
+mkdir -p ~/.relayer/config
+cp test_configs/config.yaml ~/.relayer/config/config.yaml
 ```
 
+> run this each time you want to reset the relayer's configuration
 
-Query the client states 
+### Spin up environment
+
+This will create a wasm simapp, the rollkit app and a celestia dev net.
 
 ```bash
-# docker exec -it <mycontainer> sh
-
-simd q ibc client states --grpc-addr localhost:11290 --grpc-insecure
+docker-compose up
 ```
 
-Perform msg transfer
+or
 
 ```bash
-simd tx ibc-transfer transfer transfer channel-0 cosmos1mjk79fjjgpplak5wq838w0yd982gzkyfrk07am 1000stake --from cosmos1mjk79fjjgpplak5wq838w0yd982gzkyfrk07am --keyring-backend test --chain-id wasm-simapp-1 --node tcp://localhost:46657
+docker compose up
 ```
+
+> It may be required to run `docker system prune` in between runs to wipe state.
+
+### Link the path with the relayer
+
+In a different terminal, run
+
+```bash
+./init-rly.sh
+```
+
+This will create the clients, connection and channel.
