@@ -88,12 +88,12 @@ echo ${VAL_MNEMONIC_1} | gmd keys add validator1 --recover --keyring-backend=tes
 echo ${WALLET_MNEMONIC_1} | gmd keys add $KEY_NAME --recover --keyring-backend=test
 echo ${RLY_MNEMONIC_1} | gmd keys add $KEY_2_NAME --recover --keyring-backend=test
 
-gmd genesis add-genesis-account "$(gmd keys show validator1 --keyring-backend test -a)" 100000000000stake
-gmd genesis add-genesis-account "$(gmd keys show $KEY_NAME --keyring-backend test -a)" 100000000000stake
-gmd genesis add-genesis-account "$(gmd keys show $KEY_2_NAME --keyring-backend test -a)" 100000000000stake
+gmd genesis add-genesis-account "$(gmd keys show validator1 --keyring-backend test -a)" 10000000000000000stake
+gmd genesis add-genesis-account "$(gmd keys show $KEY_NAME --keyring-backend test -a)" 100000000000000000stake
+gmd genesis add-genesis-account "$(gmd keys show $KEY_2_NAME --keyring-backend test -a)" 100000000000000000stake
 
 # set the staking amounts in the genesis transaction
-gmd genesis gentx $KEY_NAME $STAKING_AMOUNT --chain-id $CHAIN_ID --keyring-backend test
+gmd genesis gentx validator1 $STAKING_AMOUNT --chain-id $CHAIN_ID --keyring-backend test
 
 # collect genesis transactions
 gmd genesis collect-gentxs
