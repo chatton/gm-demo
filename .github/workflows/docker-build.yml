@@ -32,13 +32,15 @@ jobs:
     steps:
         # checkout ibc-go feature branch
       - uses: actions/checkout@v4
-        repository: 'cosmos/ibc-go'
-        ref: 'feat/rollkit'
-        fetch-tags: 'feat/rollkit'
-        path: 'ibc-go'
+        with:
+          repository: 'cosmos/ibc-go'
+          ref: 'feat/rollkit'
+          fetch-tags: 'feat/rollkit'
+          path: 'ibc-go'
 
       - uses: actions/checkout@v4
-        path: 'gm-demo'
+        with:
+          path: 'gm-demo'
 
       - name: Log in to the Container registry
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
