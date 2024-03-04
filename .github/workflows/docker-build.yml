@@ -25,4 +25,4 @@ jobs:
           context: gm
           dockerfile: Dockerfile.local
           push: true
-          tags: ${{ steps.meta.outputs.tag
+          tags: ${{ steps.meta.outputs.tag }}
