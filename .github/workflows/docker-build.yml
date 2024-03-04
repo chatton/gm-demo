@@ -2,7 +2,7 @@ on:
   push:
 
 jobs:
-  docker-build:
+  docker-build-rollkit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,11 +17,12 @@ jobs:
         id: meta
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
         with:
-          images: ghcr.io/chatton/gm-demo
+          images: ghcr.io/chatton/gm
 
       - name: Build and push Docker image
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
         with:
           context: gm
+          dockerfile: Dockerfile.local
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tag
