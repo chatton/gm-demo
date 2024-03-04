@@ -66,7 +66,7 @@ docker compose up
 In a different terminal, run
 
 ```bash
-./init-rly.sh
+./scripts/init-rly.sh
 ```
 
 This will create the clients, connection and channel.

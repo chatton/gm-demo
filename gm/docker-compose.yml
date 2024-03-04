@@ -28,11 +28,11 @@ services:
     command:
       - /bin/sh
       - '-c'
-      - /wasm-init.sh
+      - /init-wasm-simapp.sh
     entrypoint:
       - ''
     volumes:
-      - './wasm-init.sh:/wasm-init.sh'
+      - './scripts/init-wasm-simapp.sh:/init-wasm-simapp.sh'
       - './contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm'
       - './scripts/update-genesis.py:/update-genesis.py'
     environment:
@@ -55,11 +55,11 @@ services:
     command:
       - /bin/sh
       - '-c'
-      - /init-local.sh
+      - /init-rollkit.sh
     entrypoint:
       - ''
     volumes:
-      - './init-local.sh:/init-local.sh'
+      - './scripts/init-rollkit.sh:/init-rollkit.sh'
     ports:
       - '36657:36657'
       - '36656:36656'
