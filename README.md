@@ -67,3 +67,26 @@ In a different terminal, run
 ```
 
 This will create the clients, connection and channel.
+
+### Send IBC transfer from rollkit app to simapp
+
+1. IBC Transfer cmd:
+
+```bash
+gmd tx ibc-transfer transfer transfer channel-0 cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud 1000stake --from gm-key --key
+ring-backend test --chain-id gm --node tcp://localhost:36657  --gas 150000 --fees 4000stake
+```
+
+2. Start Relayer:
+
+```bash
+rly start
+```
+
+3. Query balance on simapp account
+
+```bash
+docker exec -it gm_wasm-simapp_1 /bin/sh
+
+simd q bank balances cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud --node tcp://localhost:46657
+```
