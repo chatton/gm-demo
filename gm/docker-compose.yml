@@ -2,6 +2,7 @@ version: '3.8'
 services:
   celestia-dev:
     hostname: celestia
+    container_name: celestia
     image: 'ghcr.io/rollkit/local-celestia-devnet:v0.12.7'
     ports:
       - '26650:26650'
@@ -18,7 +19,8 @@ services:
   
   wasm-simapp:
     hostname: wasm-simapp
-    image: 'wasm-simapp:latest'
+    container_name: wasm-simapp
+    image: '${WASM_SIMAPP_IMAGE:-ghcr.io/chatton/ibc-go-wasm-simd:latest}'
     ports:
       - '46657:46657'
       - '10290:10290'
@@ -41,7 +43,7 @@ services:
       retries: 10
       start_period: 1s
       timeout: 30s
-    
+
   rollkit-app:
     user: root
     container_name: rollkit
@@ -49,7 +51,7 @@ services:
     depends_on:
       celestia-dev:
         condition: service_healthy
-    image: 'rollkit:latest'
+    image: '${ROLLKIT_IMAGE:-ghcr.io/chatton/rollkit:latest}'
     command:
       - /bin/sh
       - '-c'
@@ -62,56 +64,3 @@ services:
       - '36657:36657'
       - '36656:36656'
       - '9290:9290'
-
-
-#   hyperspace:
-  #     image: ghcr.io/misko9/hyperspace:20231122v39
-  #     depends_on:
-  #       # - rollkit-app
-  #       - wasm-simapp
-  # #      - wasm-simapp-2
-  #     entrypoint: [ "" ]
-  #     command: [ "/bin/sh", "-c", "sleep 10 && /init-hyperspace.sh" ]
-  #     volumes:
-  #       - ./test_configs:/test_configs
-  #       - ./init-hyperspace.sh:/init-hyperspace.sh
-
-#  rly:
-#    user: root
-#    container_name: rly
-#    image: ghcr.io/charleenfei/relayer:feat-tm_wasm_support
-#    network_mode: "host"
-##    depends_on:
-##      wasm-simapp:
-##        condition: service_healthy
-##      wasm-simapp-2:
-##        condition: service_healthy
-#    entrypoint: [""]
-#    command: [ "/bin/sh", "-c", "sleep 30 && /init-rly.sh" ]
-#    volumes:
-#       - ./test_configs/config.yaml:/root/.relayer/config/config.yaml
-#       - ./init-rly.sh:/init-rly.sh
-
-#  wasm-simapp-2:
-#    # hostname: wasm-simapp-2
-#    network_mode: "host"
-#    image: wasm-simapp:latest
-#    command: [ "/bin/sh", "-c", "/wasm-init-2.sh" ]
-#    entrypoint: [ "" ]
-#    volumes:
-#      - ./wasm-init-2.sh:/wasm-init-2.sh
-#      - ./contracts/ics07_tendermint_cw.wasm:/ics07_tendermint_cw.wasm
-#      - ./scripts/update-genesis.py:/update-genesis.py
-#    #    ports:
-#    #      - "56657"
-#    #      - "11290"
-#    #      - "6061"
-#    environment:
-#      - "CHAIN_ID=wasm-simapp-2"
-#    healthcheck:
-#      # considered healthy if the /block endpoint returns a 200 status code
-#      test: curl http://localhost:56657/block
-#      interval: 5s
-#      retries: 5
-#      start_period: 1s
-#      timeout: 30s

@@ -46,6 +46,9 @@ cp test_configs/config.yaml ~/.relayer/config/config.yaml
 
 This will create a wasm simapp, the rollkit app and a celestia dev net.
 
+> the rollkit and wasm image can be overridden by setting the `ROLLKIT_IMAGE` and `WASM_SIMAPP_IMAGE` environment variables.
+> By default, images built in CI will be used.
+
 ```bash
 docker-compose up
 ```
@@ -73,20 +76,25 @@ This will create the clients, connection and channel.
 1. IBC Transfer cmd:
 
 ```bash
-gmd tx ibc-transfer transfer transfer channel-0 cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud 1000stake --from gm-key --key
-ring-backend test --chain-id gm --node tcp://localhost:36657  --gas 150000 --fees 4000stake
+docker exec -it rollkit /bin/sh
+gmd tx ibc-transfer transfer transfer channel-0 cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud 1000stake --from gm-key --keyring-backend test --chain-id gm --node tcp://localhost:36657  --gas 150000 --fees 4000stake
 ```
 
-2. Start Relayer:
+2. Query packet commitments on rollkit app
+```bash
+gmd q ibc channel packet-commitments transfer channel-0 --node tcp://localhost:36657
+```
+
+3. Start Relayer:
 
 ```bash
 rly start
 ```
 
-3. Query balance on simapp account
+4. Query balance on simapp account
 
 ```bash
-docker exec -it gm_wasm-simapp_1 /bin/sh
+docker exec -it wasm-simapp /bin/sh
 
 simd q bank balances cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud --node tcp://localhost:46657
 ```

@@ -355,4 +355,10 @@ build-docker-rollkit:
 
 build-docker-all: docker-build-wasm docker-build-rollkit
 
+start-relayer:
+	rly start
+
+ibc-transfer:
+
+
 .PHONY: docker-build-wasm docker-build-rollkit docker-build-all
