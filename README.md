@@ -1,5 +1,7 @@
 # gm-demo
 
+> NOTE: The following steps are only applicable when building images manually. The `docker-compose` file uses images pushed to this repository.
+
 ### Build wasm simapp image in ibc-go
 
 in ibc-go root directory (branch feat/rollkit)
