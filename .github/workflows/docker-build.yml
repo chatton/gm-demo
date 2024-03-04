@@ -13,24 +13,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
-        with:
-          images: ghcr.io/chatton/gm
+      - name: Build rollkit image
+        run: |
+          cd gm
+          make build-docker-rollkit
+          docker tag rollkit:latest ghcr.io/chatton/rollkit:latest
+          docker push ghcr.io/chatton/rollkit:latest
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56
-        with:
-          context: gm
-          file: Dockerfile.local
-          push: true
-          tags: ${{ steps.meta.outputs.tag }}
 
   docker-build-wasm:
     runs-on: ubuntu-latest
     steps:
-        # checkout ibc-go feature branch
       - uses: actions/checkout@v4
         with:
           repository: 'cosmos/ibc-go'
