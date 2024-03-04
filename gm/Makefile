@@ -353,6 +353,6 @@ build-docker-wasm:
 build-docker-rollkit:
 	docker build -t rollkit:latest -f ./Dockerfile.local .
 
-build-docker-all: docker-build-wasm docker-build-rollkit
+build-docker-all: build-docker-wasm build-docker-rollkit
 
-.PHONY: docker-build-wasm docker-build-rollkit docker-build-all
+.PHONY: build-docker-all build-docker-rollkit build-docker-wasm
