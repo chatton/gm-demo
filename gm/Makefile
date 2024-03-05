@@ -351,7 +351,7 @@ build-docker-wasm:
 	docker build -t wasm-simapp:latest -f ./Dockerfile.wasm .
 
 build-docker-rollkit:
-	docker build -t rollkit:latest -f ./Dockerfile.local .
+	docker build -t rollkit:latest .
 
 build-docker-all: build-docker-wasm build-docker-rollkit
 
