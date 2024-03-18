@@ -31,8 +31,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.50.4
 	github.com/cosmos/gogoproto v1.4.11
 	github.com/cosmos/ibc-go/modules/capability v1.0.0
-	github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240305103210-eab8d5ea23fe
-	github.com/cosmos/ibc-go/v8 v8.0.0
+	github.com/cosmos/ibc-go/v8 v8.0.0-beta.1.0.20240318140347-935611be6de6
 	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
@@ -352,6 +351,6 @@ replace github.com/cosmos/cosmos-sdk => github.com/rollkit/cosmos-sdk v0.50.1-ro
 
 // PR: https://github.com/cosmos/ibc-go/pull/5925
 replace (
-	github.com/cosmos/ibc-go/modules/light-clients/08-wasm => github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240305103210-eab8d5ea23fe
-	github.com/cosmos/ibc-go/v8 => github.com/cosmos/ibc-go/v8 v8.0.0-beta.1.0.20240305103210-eab8d5ea23fe
+	github.com/cosmos/ibc-go/modules/light-clients/08-wasm => github.com/cosmos/ibc-go/modules/light-clients/08-wasm v0.0.0-20240318140347-935611be6de6
+	github.com/cosmos/ibc-go/v8 => github.com/cosmos/ibc-go/v8 v8.0.0-beta.1.0.20240318140347-935611be6de6
 )
