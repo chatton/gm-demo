@@ -52,6 +52,7 @@ jobs:
         run: |
           cd ibc-go
           make build-docker-wasm tag=ibc-go-wasm-simd:latest
+          cd ..
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
