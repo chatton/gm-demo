@@ -7,7 +7,8 @@ ADD . .
 
 RUN go mod download
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=readonly -tags "netgo ledger muslc" -ldflags '-X github.com/cosmos/cosmos-sdk/version.Name=gm -X github.com/cosmos/cosmos-sdk/version.AppName=gmd -X github.com/cosmos/cosmos-sdk/version.Version= -X github.com/cosmos/cosmos-sdk/version.Commit= -X "github.com/cosmos/cosmos-sdk/version.BuildTags=netgo ledger muslc," -w -s -linkmode=external -extldflags "-Wl,-z,muldefs -static"' -trimpath -o /go/build/ ./...
+# build tag nolink_libwasmvm allows for consuming only 08-wasm types
+RUN make build BUILD_TAGS="nolink_libwasmvm"
 
 FROM alpine:3.18
 
