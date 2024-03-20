@@ -52,3 +52,25 @@ jobs:
           
           docker tag wasm-simapp:latest ghcr.io/chatton/ibc-go-wasm-simd:latest
           docker push ghcr.io/chatton/ibc-go-wasm-simd:latest
+
+  docker-build-rly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build wasm simapp
+        run: |
+          cd ibc-go
+          make build-docker-wasm tag=ibc-go-wasm-simd:latest
+          
+          cd ../gm-demo/gm
+          make build-docker-wasm
+          
+          docker tag wasm-simapp:latest ghcr.io/chatton/ibc-go-wasm-simd:latest
+          docker push ghcr.io/chatton/ibc-go-wasm-simd:latest
