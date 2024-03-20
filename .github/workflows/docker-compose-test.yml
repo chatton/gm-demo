@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docker-compose-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build docker images
+        run: |
+          make build-docker-all
+
+      - name: Docker compose up
+        run: |
+          cd gm
+          docker-compose up -d
+          sleep 30
+
+      - name: Celestia up
+        run: |
+
+          healthy="$(docker inspect --format='{{json .State.Health.Status }}' celestia)"
+
+          if [ "$healthy" != "\"healthy\"" ]; then
+            echo "Celestia is not healthy"
+            exit 1
+          fi
+      - name: Rollkit up
+        run: |
+          
+          healthy="$(docker inspect --format='{{json .State.Health.Status }}' rollkit)"
+          
+          if [ "$healthy" != "\"healthy\"" ]; then
+            echo "Rollkit is not healthy"
+            exit 1
+          fi
+      - name: Wasm Simapp up
+        run: |
+
+          healthy="$(docker inspect --format='{{json .State.Health.Status }}' wasm-simapp)"
+
+          if [ "$healthy" != "\"healthy\"" ]; then
+            echo "Wasm simapp is not healthy"
+            exit 1
+          fi

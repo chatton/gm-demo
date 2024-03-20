@@ -11,7 +11,7 @@ services:
       - '26659:26659'
       - '9090:9090'
     healthcheck:
-      test: 'curl http://celestia:26657/block'
+      test: 'curl --fail http://celestia:26657/block || exit 1'
       interval: 5s
       retries: 10
       start_period: 1s
@@ -37,13 +37,12 @@ services:
       - './scripts/update-genesis.py:/update-genesis.py'
     environment:
       - CHAIN_ID=wasm-simapp-1
-# for some reason this is not working
-#    healthcheck:
-#      test: 'curl http://wasm-simapp:46657/block'
-#      interval: 5s
-#      retries: 10
-#      start_period: 1s
-#      timeout: 30s
+    healthcheck:
+      test: 'curl --fail http://wasm-simapp:46657/status || exit 1'
+      interval: 5s
+      retries: 10
+      start_period: 1s
+      timeout: 30s
 
   rollkit-app:
     user: root
@@ -66,7 +65,7 @@ services:
       - '36656:36656'
       - '9290:9290'
     healthcheck:
-      test: 'curl http://rollkit:36657/block'
+      test: 'curl --fail http://rollkit:36657/status || exit 1'
       interval: 5s
       retries: 10
       start_period: 1s
