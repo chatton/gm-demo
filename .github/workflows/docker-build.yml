@@ -13,12 +13,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build rollkit image
-        run: |
-          cd gm
-          make build-docker-rollkit
-          docker tag rollkit:latest ghcr.io/chatton/rollkit:latest
-          docker push ghcr.io/chatton/rollkit:latest
+      - name: Extract metadata (tags, labels) for Docker
+        if: ${{ inputs.build-and-push-docker-image }}
+        id: meta
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
+        with:
+          images: ghcr.io/chatton/rollkit
+
+      - name: Build and push Rollkit Docker image
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0
+        with:
+          context: gm
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
 
 
   docker-build-wasm:
@@ -42,13 +49,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build wasm simapp
+      - name: Build wasm simapp (ibc-go)
         run: |
           cd ibc-go
           make build-docker-wasm tag=ibc-go-wasm-simd:latest
-          
-          cd ../gm-demo/gm
-          make build-docker-wasm
-          
-          docker tag wasm-simapp:latest ghcr.io/chatton/ibc-go-wasm-simd:latest
-          docker push ghcr.io/chatton/ibc-go-wasm-simd:latest
+
+      - name: Extract metadata (tags, labels) for Docker
+        if: ${{ inputs.build-and-push-docker-image }}
+        id: meta
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
+        with:
+          images: ghcr.io/chatton/ibc-go-wasm-simd
+
+      - name: Build and push Wasm Docker image
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0
+        with:
+          context: gm
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          file: Dockerfile.wasm
