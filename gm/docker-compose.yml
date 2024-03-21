@@ -37,12 +37,13 @@ services:
       - './scripts/update-genesis.py:/update-genesis.py'
     environment:
       - CHAIN_ID=wasm-simapp-1
-    healthcheck:
-      test: 'curl http://wasm-simapp:46657/block'
-      interval: 5s
-      retries: 10
-      start_period: 1s
-      timeout: 30s
+# for some reason this is not working
+#    healthcheck:
+#      test: 'curl http://wasm-simapp:46657/block'
+#      interval: 5s
+#      retries: 10
+#      start_period: 1s
+#      timeout: 30s
 
   rollkit-app:
     user: root
@@ -64,3 +65,32 @@ services:
       - '36657:36657'
       - '36656:36656'
       - '9290:9290'
+    healthcheck:
+      test: 'curl http://rollkit:36657/block'
+      interval: 5s
+      retries: 10
+      start_period: 1s
+      timeout: 30s
+
+  rly:
+    user: relayer
+    container_name: rly
+    hostname: rly
+    depends_on:
+      celestia-dev:
+        condition: service_healthy
+      rollkit-app:
+        condition: service_healthy
+#      wasm-simapp:
+#        condition: service_healthy
+    image: 'rly:latest'
+    command:
+      - /bin/sh
+      - '-c'
+      # hard code 30 second wait before initializing the relayer. So the chains are up and running for connection/channel creation
+      - "/init-rly.sh"
+    entrypoint:
+      - ''
+    volumes:
+      - './scripts/init-rly.sh:/init-rly.sh'
+      - './test_configs/config.yaml:/home/relayer/docker/config.yaml'

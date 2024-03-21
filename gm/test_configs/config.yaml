@@ -13,7 +13,7 @@ chains:
             key-directory: /root/.relayer/keys/wasm-simapp-1
             key: rly-a
             chain-id: wasm-simapp-1
-            rpc-addr: http://localhost:46657
+            rpc-addr: http://wasm-simapp:46657
             account-prefix: cosmos
             keyring-backend: test
             gas-adjustment: 1.2
@@ -38,7 +38,7 @@ chains:
             key-directory: /root/.relayer/keys/gm-key
             key: gm-key
             chain-id: gm
-            rpc-addr: http://localhost:36657
+            rpc-addr: http://rollkit:36657
             account-prefix: gm
             keyring-backend: test
             gas-adjustment: 2

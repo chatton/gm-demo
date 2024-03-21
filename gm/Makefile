@@ -353,6 +353,13 @@ build-docker-wasm:
 build-docker-rollkit:
 	docker build -t rollkit:latest .
 
-build-docker-all: build-docker-wasm build-docker-rollkit
+build-docker-rly:
+	docker build -t rly:latest -f ./Dockerfile.rly .
+
+build-docker-all: build-docker-wasm build-docker-rollkit build-docker-rly
+
+# perform an ibc transfer from the rollkit app to the wasm simapp
+ibc-transfer:
+	docker exec -it rollkit gmd tx ibc-transfer transfer transfer channel-0 cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud 1000stake --from gm-key --keyring-backend test --chain-id gm --node tcp://rollkit:36657  --gas 150000 --fees 4000stake -y
 
 .PHONY: build-docker-all build-docker-rollkit build-docker-wasm

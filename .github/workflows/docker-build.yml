@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - master
 
 jobs:
   docker-build-rollkit:
@@ -52,3 +54,22 @@ jobs:
           
           docker tag wasm-simapp:latest ghcr.io/chatton/ibc-go-wasm-simd:latest
           docker push ghcr.io/chatton/ibc-go-wasm-simd:latest
+
+  docker-build-rly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build rly
+        run: |
+          cd gm
+          make build-docker-rly
+          
+          docker tag rly:latest ghcr.io/chatton/rly:latest
+          docker push ghcr.io/chatton/rly:latest

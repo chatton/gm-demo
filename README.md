@@ -47,6 +47,7 @@ cp test_configs/config.yaml ~/.relayer/config/config.yaml
 ### Spin up environment
 
 This will create a wasm simapp, the rollkit app and a celestia dev net.
+The go relayer will also be started and the path will be linked.
 
 > the rollkit and wasm image can be overridden by setting the `ROLLKIT_IMAGE` and `WASM_SIMAPP_IMAGE` environment variables.
 > By default, images built in CI will be used.
@@ -63,23 +64,12 @@ docker compose up
 
 > It may be required to run `docker system prune` in between runs to wipe state.
 
-### Link the path with the relayer
-
-In a different terminal, run
-
-```bash
-./scripts/init-rly.sh
-```
-
-This will create the clients, connection and channel.
-
 ### Send IBC transfer from rollkit app to simapp
 
 1. IBC Transfer cmd:
 
 ```bash
-docker exec -it rollkit /bin/sh
-gmd tx ibc-transfer transfer transfer channel-0 cosmos1m9l358xunhhwds0568za49mzhvuxx9uxre5tud 1000stake --from gm-key --keyring-backend test --chain-id gm --node tcp://localhost:36657  --gas 150000 --fees 4000stake
+make ibc-transfer
 ```
 
 2. Query packet commitments on rollkit app

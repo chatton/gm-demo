@@ -1,0 +1,12 @@
+FROM docker.io/damiannolan/rly-local:latest AS rly
+
+FROM ubuntu:20.04
+
+COPY --from=rly /bin/rly /bin
+
+RUN useradd -ms /bin/bash relayer
+USER relayer
+
+WORKDIR /home/relayer
+
+ENTRYPOINT ["rly"]
