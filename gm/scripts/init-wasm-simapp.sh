@@ -25,7 +25,7 @@ simd genesis gentx val1 100000000000stake --keyring-backend test --chain-id=$CHA
 simd genesis collect-gentxs
 
 genesis_contents=$(cat /root/.simapp/config/genesis.json)
-python ./update-genesis.py "${genesis_contents}" /root/.simapp/config/genesis.json  /ics07_tendermint_cw.wasm
+python ./update-genesis.py "${genesis_contents}" /root/.simapp/config/genesis.json  /ics07_rollkit_cw.wasm
 
 echo "Final genesis.json" && cat ~/.simapp/config/genesis.json
 
