@@ -25,6 +25,6 @@ rly --home ${HOME}/.relayer keys restore ${CHAIN_B_NAME} ${CHAIN_B_KEY} "${RLY_M
 rly q balance ${CHAIN_A_NAME}
 rly q balance ${CHAIN_B_NAME}
 
-rly tx link rollkit-path --src-wasm-code-id ddc292a095aa9b8625d5d7ebdd3a9c2301bda10a489385d560ecd3f7846fbb39
+rly tx link rollkit-path --src-wasm-code-id 10165ede3c84872d173e57e3fa22c55f73ae41c89e1108e9975ec34568fc7090
 
 rly start
