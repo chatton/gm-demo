@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"cosmossdk.io/core/appmodule"
 	storetypes "cosmossdk.io/store/types"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -28,7 +30,6 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
-	ibcclientkeeper "github.com/cosmos/ibc-go/v8/modules/core/02-client/keeper"
 	ibcclienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	ibcconnectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
@@ -76,22 +77,24 @@ func (app *App) registerIBCModules() {
 	scopedICAControllerKeeper := app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
 	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
 
+	// The ibc-go-wasm-simd chain has light client for rollkit app (07-tendermint-cw runtime: cosmwasm).
+	// The gm-demo rollkit app has light client for wasm-simd (07-tendermint runtime:go).
+	// Rollkit app validates self as 08-wasm client, because counterparties which wish to connect must deploy rollkit contract as cosmwasm contract.
+	consensusHost, err := ibcwasmtypes.NewWasmConsensusHost(app.AppCodec(), ibctm.NewConsensusHost(app.StakingKeeper))
+	if err != nil {
+		panic(fmt.Errorf("failed to create ibc consensus host: %w", err))
+	}
+
 	// Create IBC keeper
 	app.IBCKeeper = ibckeeper.NewKeeper(
 		app.appCodec,
 		app.GetKey(ibcexported.StoreKey),
 		app.GetSubspace(ibcexported.ModuleName),
-		app.StakingKeeper,
+		consensusHost,
 		app.UpgradeKeeper,
 		scopedIBCKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-
-	// The ibc-go-wasm-simd chain has light client for rollkit app (07-tendermint-cw runtime: cosmwasm).
-	// The gm-demo rollkit app has light client for wasm-simd (07-tendermint runtime:go).
-	// Rollkit app validates self as 08-wasm client, because counterparties which wish to connect must deploy rollkit contract as cosmwasm contract.
-	tmClientValidator := ibcclientkeeper.NewTendermintClientValidator(app.StakingKeeper)
-	app.IBCKeeper.ClientKeeper.SetSelfClientValidator(ibcwasmtypes.NewWasmTMClientValidator(app.appCodec, tmClientValidator))
 
 	// Register the proposal types
 	// Deprecated: Avoid adding new handlers, instead use the new proposal flow
@@ -132,6 +135,7 @@ func (app *App) registerIBCModules() {
 		app.AccountKeeper,
 		scopedICAHostKeeper,
 		app.MsgServiceRouter(),
+		app.GRPCQueryRouter(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	app.ICAControllerKeeper = icacontrollerkeeper.NewKeeper(
